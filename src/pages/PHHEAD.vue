@@ -25,6 +25,7 @@
 				<ObjForm :pObj="myObj.PHPHNOIY" :pFrmObj="'frm'+frmID" />
 				<ObjForm :pObj="myObj.PHPHNO" :pFrmObj="'frm'+frmID" />
 				<ObjForm :pObj="myObj.PHDATE" :pFrmObj="'frm'+frmID" />
+				<ObjForm :pObj="myObj.PHNOTA" :pFrmObj="'frm'+frmID" />
 				<ObjForm :pObj="myObj.PHTYPE" :pFrmObj="'frm'+frmID" />
 	  		</div>
   		</div>

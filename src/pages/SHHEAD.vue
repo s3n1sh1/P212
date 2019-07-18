@@ -25,6 +25,7 @@
 				<ObjForm :pObj="myObj.SHSHNOIY" :pFrmObj="'frm'+frmID" />
 				<ObjForm :pObj="myObj.SHSHNO" :pFrmObj="'frm'+frmID" />
 				<ObjForm :pObj="myObj.SHDATE" :pFrmObj="'frm'+frmID" />
+				<ObjForm :pObj="myObj.SHNOTA" :pFrmObj="'frm'+frmID" />
 				<ObjForm :pObj="myObj.SHTYPE" :pFrmObj="'frm'+frmID" />
 	  		</div>
   		</div>

@@ -15,6 +15,7 @@
 
   		<div class="col-xs-12 col-md-11 q-ma-xs row">
 	  		<div class="col-xs-12 col-md-8">
+				<ObjForm :pObj="myObj.BHDESC" :pFrmObj="'frm'+frmID" />
 <!-- 				<ObjForm :pObj="myObj.BHBPNOIY" :pFrmObj="'frm'+frmID" />
 				<ObjForm :pObj="myObj.BHADDR" :pFrmObj="'frm'+frmID" />
 				<ObjForm :pObj="myObj.BHCITY" :pFrmObj="'frm'+frmID" />
@@ -24,6 +25,7 @@
 	  		<div class="col-xs-12 col-md-4">
 				<ObjForm :pObj="myObj.BHBHNOIY" :pFrmObj="'frm'+frmID" />
 				<ObjForm :pObj="myObj.BHBHNO" :pFrmObj="'frm'+frmID" />
+				<ObjForm :pObj="myObj.BHNOTA" :pFrmObj="'frm'+frmID" />
 				<ObjForm :pObj="myObj.BHDATE" :pFrmObj="'frm'+frmID" />
 	  		</div>
   		</div>
