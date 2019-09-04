@@ -48,6 +48,9 @@ Router.beforeEach((to, from, next) => {
 
     var AppName = store.state.App.AppName + '-name';
     switch(to.name) {
+        case 'report':
+          next();
+          break;
         case 'pertamax':
         case 'HalamanUtama':
         case 'mainMenu':

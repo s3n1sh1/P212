@@ -187,7 +187,12 @@
 					    		method: ''
 					    	});
 
-					    	break;					        
+					    	break;				
+					    case "9": // Print
+					    	// window.open('http://www.detik.com', '_blank');		
+					    	// window.open('report', '_blank');		
+					        weAuth.printReport({frmID: this.frmID, method: 'PrintForm', params: ''})
+					        break;	        
 					}					
 				}
 

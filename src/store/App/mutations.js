@@ -105,6 +105,7 @@ export function setAppUser (state, params) {
     // console.log('mutations-setAppUser ', params);
 }
 
+
 export function setAppModules (state, {id, params}) {
 
  	if (id === '') {

@@ -515,3 +515,24 @@ export async function doAppSaveData ({commit, state}, {frmID, method, mode, data
 
 
 }  
+
+
+export async function doAppReport ({commit, state}, {frmID, method, frmParams, dataParams}) {
+    var params = new Object;
+        if (typeof(dataParams)!="undefined") {
+            params = dataParams;
+        }
+        params['Controller'] = 'cr' + frmID;
+        params['Method'] = method;
+        params['frmID'] = frmID;        
+        if (typeof(frmParams)!="undefined") {
+            params['frmParams'] = frmParams;        
+        }
+
+    const Hasil = await weApi.fnPrintData (params);
+    return Hasil;
+
+    // const Hasil = await weApi.fnEncryptParam (params);
+    // // console.log('Actions - doAppReport', Hasil)
+    // return Hasil.Data;
+}  

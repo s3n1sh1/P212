@@ -22,6 +22,9 @@ const routes = [
     path: '/login', name : 'login', component: () => import('layouts/Versi1/login') 
   },
   { 
+    path: '/report', name : 'report', component: () => import('layouts/Versi1/report') 
+  },
+  { 
     path: '*', component: () => import('pages/Error505') 
   }, // Always leave this as last one
 ]

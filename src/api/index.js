@@ -151,6 +151,29 @@ ada di masing masing module yang memanggil fnPostData
 		}
 	},
 
+
+
+	async fnPrintData (DataParms, UserName) {	
+/*
+Controller dan Method
+ada di masing masing module yang memanggil fnPrintData
+*/		
+		var AppName = store.state.App.AppName;
+		
+		DataParms['AppCompanyCode'] = localStorage.getItem(AppName+'-company');
+		DataParms['AppUserName'] = localStorage.getItem(AppName+'-name');
+		DataParms['AppToken'] = localStorage.getItem(AppName+'-token');
+		DataParms['AppDateInfo'] = localStorage.getItem(AppName+'-dateInfo');
+		DataParms['AppName'] = AppName;
+
+ 		// console.log('api.fnPrintData - token', localStorage.getItem(AppName+'-token'));
+ 		// console.log('api.fnPrintData - DataParms', DataParms);
+
+		var params = this.fnEncryptParam(DataParms); 
+    	return params.Data;
+
+	},
+
 }
 
 

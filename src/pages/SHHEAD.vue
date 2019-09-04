@@ -187,7 +187,10 @@
 					    		method: ''
 					    	});
 
-					    	break;					        
+					    	break;		
+					    case "9": // Print
+					        weAuth.printReport({frmID: this.frmID, method: 'PrintForm', params: ''})
+					        break;	        				        
 					}					
 				}
 

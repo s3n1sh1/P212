@@ -665,6 +665,37 @@ import { date } from 'quasar'
 
 		},
 
+		async printReport({frmID, method, params}) {
+			const Hasil = await store.dispatch('App/doAppReport', { 
+					            frmID: frmID, 
+					            method: method,
+					            frmParams: store.getters['App/getAppForms'][frmID].Grid.RowData, 
+					            params: params
+							});
+			// console.log('printReport ', Hasil);
+
+			let routeData = router.resolve({name: 'report', query: {data: Hasil} });
+			window.open(routeData.href, '_blank');
+
+
+			  // let blob = new Blob([Hasil.data], { type: 'application/pdf' })
+			  // let link = document.createElement('a')
+			  // link.href = window.URL.createObjectURL(blob)
+  
+			  // let blob = new Blob([Hasil.data], { type: 'application/pdf' })
+			  // let link = document.createElement('a')
+			  //     link.href = window.URL.createObjectURL(blob)
+  			// 	  // link.click()
+			  // window.open(link.href, '_blank');
+
+			// window.open('report', '_blank');	
+			// window.open('report');		
+			// router.push({name : 'report', query: {data: "someData"} });
+
+			// let routeData = this.$router.resolve({name: 'routeName', query: {data: "someData"}});
+			// window.open(routeData.href, '_blank');
+
+		},
 
 	}
 
