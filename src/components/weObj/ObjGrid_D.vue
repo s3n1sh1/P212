@@ -2,7 +2,8 @@
 	<q-tr :props="dataDetail" 
 		:class="frmType === 'popup' ? 'cursor-pointer transition-generic' : ''" 
 		@click.native="RowClick(dataDetail.row)"	>
-		<q-td v-for="col in dataDetail.cols" 
+		<q-td   class=""
+				v-for="col in dataDetail.cols" 
 				:key="col.name" 
 				v-if="frmType === 'popup' ? col.tipe === 'act' ? false : true : true" 
 				:props="dataDetail">
