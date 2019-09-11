@@ -38,7 +38,7 @@ module.exports = function (ctx) {
         : { // and on build (production):
           // API: JSON.stringify('http://172.30.1.39:8099/a5framework/lar/api/') // ikut IP server untuk laravel 
           // API: JSON.stringify('http://192.168.1.24:8099/a5framework/lar/api/') // ikut IP server untuk laravel 
-          API: JSON.stringify('http://laravel.wexits.com/project01/public/index.php/api/') // ikut IP server untuk laravel 
+          API: JSON.stringify('http://laravel.wexits.com/toko/public/index.php/api/') // ikut IP server untuk laravel 
         },
         
       extendWebpack (cfg) {
