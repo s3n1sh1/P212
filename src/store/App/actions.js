@@ -279,12 +279,13 @@ export async function doAppLoadGrid ({commit, state}, {params, frmID, id}) {
 	Hati-hati pakai v-if
 	karena bisa mentrigger ini berubah!!!
 */
+    // console.log('Action - params',params);
     const Hasil = await weApi.fnRequestData (params, '');
 
     if(typeof(Hasil.success) != 'undefined') {
         return Hasil;
     }
-    // console.log('Action - params',params);
+    // console.log('Action - Hasil',Hasil);
     // console.log('Action - frmID',frmID);
     // console.log('Action - id',id);
     // console.log('Action - doAppLoadGrid',Hasil);
@@ -352,10 +353,10 @@ export async function doAppLoadGrid ({commit, state}, {params, frmID, id}) {
             id: frmID, 
             path: id + '.Pagination.page', 
             data: Hasil.Data.current_page });    
-    // commit('setAppForms_Data', {
-    // 		id: frmID, 
-    // 		path: id + '.Pagination.rowsPerPage', 
-    // 		data: Hasil.Data.total === Hasil.Data.per_page ? 0 : Hasil.Data.per_page });
+    commit('setAppForms_Data', {
+         id: frmID, 
+         path: id + '.Pagination.rowsPerPage', 
+         data: Hasil.Data.total === Hasil.Data.per_page ? 0 : Hasil.Data.per_page });
     commit('setAppForms_Data', {id: frmID, path:id + '.Pagination.rowsNumber', data: Hasil.Data.total});    
     // End Pagination
 

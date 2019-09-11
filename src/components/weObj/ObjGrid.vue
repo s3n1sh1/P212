@@ -17,7 +17,8 @@
 	      :separator="getAppForms[frmID].Grid.Seperator === undefined ? '' : getAppForms[frmID].Grid.Seperator.Value"
 	      :visible-columns="getAppForms[frmID].Grid.VisibleColumns === undefined ? [] : getAppForms[frmID].Grid.VisibleColumns"
 -->
-	    <q-table class="sticky-table"
+	    <q-table 
+	      class="sticky-table"
 	      :title="formType==='grd' ? myGrid.Description === undefined ? '' : myGrid.Description : ''"
       	  :table-style="tblheight"
 	      :data="myGrid.Grid.Rows === undefined ? [] : myGrid.Grid.Rows.data"
@@ -29,21 +30,19 @@
 		  :loading="loading"
 	      @request="LoadDataGrid"
 	      dense
-	      color="secondary"
+	      color="primary"
 	      :hide-bottom="formType==='grd' ? true : false"
-	    > 
+	      grid> 
 
 
 
 			<template 
 				:slot="formType==='grd' ? 'top-right' : ''" 
 				slot-scope="props" >
-				<q-btn
-				  v-if="myGrid.Action.toUpperCase().indexOf('A') == -1 ? false : true" 
-				  flat round dense
-				  icon="add"
-				  @click="myGrid.grdAction({mode:'1', data:''})"
-				/>
+				<q-btn icon="add"
+					   v-if="myGrid.Action.toUpperCase().indexOf('A') == -1 ? false : true" 
+					   flat round dense
+					   @click="myGrid.grdAction({mode:'1', data:''})" />
 			</template>
 
 	    	<GridHeader slot="header" slot-scope="props"
@@ -62,7 +61,49 @@
 	    		:dataDetail="props"
 	    	/>
 
+	    	<GridFooter slot="bottom" slot-scope="props"
+	    		:frmID="frmID" 
+	    		:subFrmID="subForm"
+	    		:frmType="formType"
+	    		:myGrid="myGrid"
+	    		:dataFooter="props"
+	    	/>
+
 		</q-table>	
+
+<!-- 
+ -->
+
+		<q-page-sticky 
+			v-if="frmType === 'grd' ? false : true"
+			position="bottom-left" 
+			class="size-XS row" 
+			v-show="myGrid.Grid.Pagination.rowsNumber === 0 ? true : false"
+			:offset="[6, 10]">
+			<q-btn 	round 
+					color="secondary" 
+					icon="refresh" 
+					size="sm"
+					label="refresh...."
+					class="q-mr-xs"
+					@click="myGrid.Grid.LoadDataGrid()" />
+			<q-btn 	color="secondary" 
+					icon="settings" 
+					size="sm"
+					@click="frmSetting=!frmSetting"
+					label="settings">	
+			</q-btn>
+
+	    		<q-modal v-model="frmSetting" position="top">
+	              <GridSetting 
+	    	    		:frmID="frmID" 
+	    	    		:subFrmID="subFrmID"
+	    	    		:frmType="frmType"
+	    	    		:myGrid="myGrid"
+	              />
+	    		</q-modal>				
+
+		</q-page-sticky>
 
 	</div>
 </template>
@@ -75,9 +116,11 @@
 	import GridHeader from './ObjGrid_H.vue';
 	import GridDetail from './ObjGrid_D.vue';
 	import GridOthers from './ObjGrid_O.vue';
+	import GridFooter from './ObjGrid_F.vue';
+	import GridSetting from './ObjGrid_S.vue';
 	export default { 
   		name: 'ObjGrid',		
-  		components : { GridHeader, GridDetail, GridOthers },	
+  		components : { GridHeader, GridDetail, GridOthers, GridFooter, GridSetting },	
   		props: {
             frmID: { type : String },
             subFrmID: { type : String },
@@ -170,7 +213,7 @@
 	      	myGrid() {
 
 				// console.log('Masuk myGrid', this.frmID + ' (' + this.subForm + ') ');
-
+				// console.log('myGrid : ', this.getAppForms[this.frmID])
 	      		if (this.subForm==="") {
 		      		return this.getAppForms[this.frmID];
 	      		} else {
@@ -205,7 +248,8 @@
 			...mapMutations('App',['setAppForms_Data']),
 			...mapActions('App',['doAppLoadGrid']),
 			onResize(size){
-				// console.log(this);
+				// console.log('onResize', this);
+				// console.log('onResize - size', size);
 			    // this.tblheight = "height: "+(size.height - 145).toString()+"px"
 				if (this.frmType === "popup") {
 				    this.tblheight = "height: "+(size.height - 300).toString()+"px"
@@ -213,6 +257,7 @@
 					this.tblheight = "";
 				} else {
 				    this.tblheight = "height: "+(size.height - 145).toString()+"px"
+				    // this.tblheight = "height: "+(size.height - 150).toString()+"px; max-height: 600px;"
 				}
 			},			
 		    async LoadDataGrid(event) {
@@ -277,6 +322,7 @@
 		        loading: false,
 		        // firstTime: true,
       			tblheight: "height: 400px",
+      			frmSetting: false,
 	      	}
 	    }
 	}
@@ -285,22 +331,23 @@
 
 <!-- 
 	<style scoped >
+
+
+	table thead tr:nth-child(1) th{
+	    background: lightgrey;
+	  }
+
 -->
 <style>
-.sticky-table thead tr:nth-child(1) th {
-    background: lightgrey;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
+	.sticky-table thead tr:nth-child(1) th {
+    	background: lightgrey;
+	    position: sticky;
+	    top: 0;
+	    z-index: 10;
+	}
 
-table thead tr:nth-child(1) th{
-    background: lightgrey;
-  }
-
-.q-table td, .q-table th {
-    /* don't shorten cell contents */
-    white-space: normal !important;
-}
-
+	.q-table td, .q-table th {
+	    /* don't shorten cell contents */
+	    white-space: normal !important;
+	}
 </style>
