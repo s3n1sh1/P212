@@ -54,8 +54,8 @@ Router.beforeEach((to, from, next) => {
         case 'pertamax':
         case 'HalamanUtama':
         case 'mainMenu':
-            console.log('('+AppName+')');
-            console.log('('+localStorage.getItem(AppName)+')');
+            // console.log('('+AppName+')');
+            // console.log('('+localStorage.getItem(AppName)+')');
             if (!localStorage.getItem(AppName)) {    
               next({name: 'login'});
             } 
@@ -80,6 +80,7 @@ Router.beforeEach((to, from, next) => {
               function() {
 
                 var UserInfo = store.state.App.AppUser; 
+                // console.log('route - UserInfo',UserInfo);
                 if(UserInfo.flag) {       
                   var MdiFrm = store.getters['App/getAppModules'].MdiFrm;
                   if (store.getters['App/getAppForms'][MdiFrm] === undefined) {
@@ -88,7 +89,8 @@ Router.beforeEach((to, from, next) => {
                   }
                   next();
                 } else {
-                  if (localStorage.getItem('name')) {
+                  // console.log('masuk sini','bbbbb')
+                  if (localStorage.getItem(AppName)) {
                     next({name: 'mainMenu'}); 
                   } else {
                     next({name: 'login'});

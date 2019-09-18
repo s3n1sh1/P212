@@ -85,15 +85,16 @@
     		:frmID="getAppIdFormActive(frmID)" />
     </q-layout-drawer>
 
-	<q-page-container class="">
-	  	<q-page class="docs-input column ">
-
+	<q-page-container>
+	  	<q-page>   
+	  		<!-- class="docs-input column" 
+	  			 class ini bisa membuat layar jadi ada scroll saat pilih kolom show / hide di grid
+	  		-->   
 			<transition>
 			  <keep-alive>
 				<router-view :key="$route.fullPath"></router-view>
 			  </keep-alive>
 			</transition>
-
 	  	</q-page>
   	</q-page-container>
 

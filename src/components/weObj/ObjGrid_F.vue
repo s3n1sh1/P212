@@ -1,35 +1,33 @@
 <template>
-      <div :props="dataFooter" class="row flex-center q-py-sm">
-        <q-btn
-          round dense size="sm" icon="refresh" color="secondary" class="q-mr-sm"
-          @click="myGrid.Grid.LoadDataGrid()"
-        />
-        <q-btn
-          round dense size="sm" icon="undo" color="secondary" class="q-mr-sm"
-          :disable="dataFooter.isFirstPage"
-          @click="dataFooter.prevPage"
-        />
-        <div class="q-mr-sm" style="font-size: small">
-        	Page {{ dataFooter.pagination.page }} / {{ myGrid.Grid.Rows.last_page }}
+      <div  class="row flex-center q-py-sm"
+            v-if="myGrid.Grid === undefined ? false : 
+                  myGrid.Grid.Columns === undefined ? false : true">
+
+        <q-btn  round dense size="sm" 
+                icon="refresh" color="secondary" class="q-mr-sm"
+                @click="myGrid.Grid.LoadDataGrid()" />
+        <q-btn  round dense size="sm" icon="undo" color="secondary" class="q-mr-sm"
+                :disable="myGrid.Grid.Rows.current_page == 1 ? true : false"
+                @click="PreviousPage()" />
+        <div  class="q-mr-sm" 
+              style="font-size: small">
+        	Page {{ myGrid.Grid.Rows.current_page }} / {{ myGrid.Grid.Rows.last_page }}
         </div>
          <!-- myGrid.Grid.Rows.last_page -->
          <!-- dataFooter.pagesNumber -->
-        <q-btn
-          round dense size="sm" icon="redo" color="secondary" class="q-mr-sm"
-          :disable="dataFooter.isLastPage"
-          @click="dataFooter.nextPage"
-        />
-        <q-btn round dense size="sm" icon="settings" color="secondary" 
-          @click="frmSetting=!frmSetting"
-        />
-
+        <q-btn  round dense size="sm" icon="redo" color="secondary" class="q-mr-sm"
+                :disable="myGrid.Grid.Rows.current_page === myGrid.Grid.Rows.last_page ? true : false"
+                @click="NextPage()" />
+        <q-btn  round dense size="sm" 
+                icon="settings" color="secondary" 
+                @click="frmSetting=!frmSetting" />
 
     		<q-modal v-model="frmSetting" position="top">
               <GridSetting 
-    	    		:frmID="frmID" 
-    	    		:subFrmID="subFrmID"
-    	    		:frmType="frmType"
-    	    		:myGrid="myGrid"
+      	    		:frmID="frmID" 
+      	    		:subFrmID="subFrmID"
+      	    		:frmType="frmType"
+      	    		:myGrid="myGrid"
               />
     		</q-modal>
 
@@ -54,7 +52,27 @@
 		},
 		created () {			
 			// console.log('masuk Object Grid HEADER ', this.frmID+' ('+this.subFrmID+')');
-		},			
+		},
+    methods: {
+      ...mapMutations('App',['setAppForms_Data']),
+      NextPage() {        
+        var lastPage = this.myGrid.Grid.Rows.last_page; 
+        var currentPage = this.myGrid.Grid.Rows.current_page;
+        this.setAppForms_Data({
+          id: this.frmID,
+          path: this.subFrmID+'Grid.Pagination.page',
+          data: (currentPage) >= lastPage ? lastPage : (currentPage+1) });
+        this.myGrid.Grid.LoadDataGrid();
+      },
+      PreviousPage() {
+        var currentPage = this.myGrid.Grid.Rows.current_page;
+        this.setAppForms_Data({
+          id: this.frmID,
+          path: this.subFrmID+'Grid.Pagination.page',
+          data: (currentPage) <= 1 ? 1 : (currentPage-1) });
+        this.myGrid.Grid.LoadDataGrid();
+      }
+    },    
 		data () {
 			return {	
 		        frmSetting: false,

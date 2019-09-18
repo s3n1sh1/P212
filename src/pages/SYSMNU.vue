@@ -1,5 +1,5 @@
 <template>
-  <div class="docs-table">
+  <div>
   <!-- 
   	v-if akan merender ulang (re-create object ulang) 
   	kalau sudah re-create
@@ -107,7 +107,7 @@
 		computed: {
 	      	...mapGetters('App',['getAppForms']),
 			myForm() {
-				console.log('Masuk myForm ' + this.frmID);
+				// console.log('Masuk myForm ' + this.frmID);
 				return this.getAppForms[this.frmID];
 				// return [];
 			},			

@@ -235,17 +235,19 @@
 				},
 				set: function (NewValue) {					
 					this.setAppForms_Data({
-						id: this.frmID, path:'Grid.Seperator.Value', data: NewValue });
+						id: this.frmID, path:this.subFrmID+'Grid.Seperator.Value', data: NewValue });
 				}
 			},
 			VisibleColumns: {
 				get: function () {
-					return this.myGrid.Grid === undefined ? [] : 
+					// console.log('masuk aaa', this.myGrid.Grid.VisibleColumns)
+					return this.myGrid.Grid.VisibleColumns === undefined ? [] : 
 							this.myGrid.Grid.VisibleColumns;
 				},
 				set: function (NewValue) {					
+					// console.log('masuk bbb', NewValue)
 					this.setAppForms_Data({
-						id: this.frmID, path:'Grid.VisibleColumns', data: NewValue });
+						id: this.frmID, path:this.subFrmID+'Grid.VisibleColumns', data: NewValue });
 				}
 			},
 			rowPerPage: {
@@ -255,7 +257,7 @@
 				},
 				set: function (NewValue) {		
 					this.setAppForms_Data({
-						id: this.frmID, path:'Grid.Pagination.rowsPerPage', data: NewValue });
+						id: this.frmID, path:this.subFrmID+'Grid.Pagination.rowsPerPage', data: NewValue });
 					this.myGrid.Grid.LoadDataGrid()			
 				}
 			},
@@ -270,7 +272,7 @@
 
 				this.setAppForms_Data({
 					id: this.frmID,
-					path: 'Grid.Pagination.page',
+					path: this.subFrmID+'Grid.Pagination.page',
 					data: currentPage });
 				this.myGrid.Grid.LoadDataGrid();
 
@@ -280,7 +282,7 @@
 				var currentPage = this.myGrid.Grid.Rows.current_page;
 				this.setAppForms_Data({
 					id: this.frmID,
-					path: 'Grid.Pagination.page',
+					path: this.subFrmID+'Grid.Pagination.page',
 					data: (currentPage) >= lastPage ? lastPage : (currentPage+1) });
 				this.myGrid.Grid.LoadDataGrid();
 			},
@@ -288,7 +290,7 @@
 				var currentPage = this.myGrid.Grid.Rows.current_page;
 				this.setAppForms_Data({
 					id: this.frmID,
-					path: 'Grid.Pagination.page',
+					path: this.subFrmID+'Grid.Pagination.page',
 					data: (currentPage) <= 1 ? 1 : (currentPage-1) });
 				this.myGrid.Grid.LoadDataGrid();
 			},

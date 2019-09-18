@@ -1,5 +1,5 @@
 <template>
-  <div class="docs-table">
+  <div>
   <!-- 
   	v-if akan merender ulang (re-create object ulang) 
   	kalau sudah re-create
@@ -8,7 +8,8 @@
   	<div v-show="myForm.Properties.layout==='1'">
 		<ObjGrid :frmID="frmID" />
   	</div>
-  	<div v-show="myForm.Properties.layout==='2'" class="text-left q-ma-xs round dense col">
+  	<div v-show="myForm.Properties.layout==='2'" 
+  		 class="text-left q-ma-xs round dense col">
 		<ObjForm 
 			v-for="(Obj, index) in myForm.Forms['frm'+frmID]" 
 			:pObj="Obj" :pFrmObj="'frm'+frmID"

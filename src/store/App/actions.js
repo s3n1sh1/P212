@@ -402,6 +402,16 @@ export function doAppFillObjectValue ({commit, state}, {frmID, frmObj, hasil}) {
 
         switch (o.Tipe) {
             case "num":
+                // console.log(o.Code + ' : ', o);
+                // console.log(o.Code + 'aaa', typeof(o.formatUang));
+                // if( typeof(o.formatUang) != 'undefined' ) {
+                //     console.log('Nilai : ', Nilai)
+                //     console.log('Format : ', o.formatUang(Nilai))
+                // }
+                // o.ValueNum = Nilai;
+                // o.Value = typeof(o.formatUang) != 'undefined' ? o.formatUang(Nilai) : Nilai; 
+                // o.Value = typeof(o.formatUang) != 'undefined' ? '9999' : '8888'; 
+                o.ValueNum = Nilai; 
                 o.Value = Nilai; 
                 break;
             case "tog": // Begin By Wilianto 2019 07 05

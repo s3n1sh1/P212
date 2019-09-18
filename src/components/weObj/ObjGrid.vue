@@ -1,8 +1,13 @@
 
 <template>
-	<div class="docs-table myGrid">  	
-		<q-window-resize-observable @resize="onResize"/>
+	<!-- class="docs-table myGrid" -->
 
+	<div>  
+		<q-window-resize-observable @resize="onResize"/>
+	<!-- 	
+		<q-window-resize-observable @resize="onResizeWin"/>	
+		<q-resize-observable @resize="onResizeEle" />
+ -->
     	<GridOthers 
     		:frmID="frmID" 
     		:subFrmID="subForm"
@@ -16,11 +21,12 @@
 	      :pagination.sync="getAppForms[frmID].Grid.Pagination === undefined ? '' : getAppForms[frmID].Grid.Pagination"
 	      :separator="getAppForms[frmID].Grid.Seperator === undefined ? '' : getAppForms[frmID].Grid.Seperator.Value"
 	      :visible-columns="getAppForms[frmID].Grid.VisibleColumns === undefined ? [] : getAppForms[frmID].Grid.VisibleColumns"
+	      :hide-bottom="formType==='grd' ? true : false"			
 -->
 	    <q-table 
 	      class="sticky-table"
-	      :title="formType==='grd' ? myGrid.Description === undefined ? '' : myGrid.Description : ''"
       	  :table-style="tblheight"
+	      :title="formType==='grd' ? myGrid.Description === undefined ? '' : myGrid.Description : ''"
 	      :data="myGrid.Grid.Rows === undefined ? [] : myGrid.Grid.Rows.data"
 	      :columns="myGrid.Grid.Columns === undefined ? [] : myGrid.Grid.Columns"
 	      :row-key="myGrid.Grid.Keys === undefined ? '' : myGrid.Grid.Keys"
@@ -31,7 +37,7 @@
 	      @request="LoadDataGrid"
 	      dense
 	      color="primary"
-	      :hide-bottom="formType==='grd' ? true : false"
+	      hide-bottom
 	      grid> 
 
 
@@ -61,18 +67,18 @@
 	    		:dataDetail="props"
 	    	/>
 
-	    	<GridFooter slot="bottom" slot-scope="props"
-	    		:frmID="frmID" 
-	    		:subFrmID="subForm"
-	    		:frmType="formType"
-	    		:myGrid="myGrid"
-	    		:dataFooter="props"
-	    	/>
 
 		</q-table>	
 
 <!-- 
- -->
+
+    	<GridFooter slot="bottom" slot-scope="props"
+    		:frmID="frmID" 
+    		:subFrmID="subForm"
+    		:frmType="formType"
+    		:myGrid="myGrid"
+    		:dataFooter="props"
+    	/>
 
 		<q-page-sticky 
 			v-if="frmType === 'grd' ? false : true"
@@ -105,6 +111,24 @@
 
 		</q-page-sticky>
 
+		<q-page-sticky 
+			v-if="frmType === 'grd' ? false : true"
+			position="bottom-left" 
+			class="size-XS row" 
+			:offset="[6, 0]">
+		</q-page-sticky>
+
+ -->
+		<div v-if="frmType === 'grd' ? false : true" >
+	    	<GridFooter 
+	    		:frmID="frmID" 
+	    		:subFrmID="subForm"
+	    		:frmType="formType"
+	    		:myGrid="myGrid"
+	    	/>
+		</div>
+
+
 	</div>
 </template>
 
@@ -134,7 +158,7 @@
 	      	// 	console.log('created - ObjGrid ', sF);
 	      	// }
 			this.setAppForms_Data({ id: this.frmID, path:sF+'Grid', data: {} });
-
+			// console.log('created - ObjGrid ' + sF+'Grid : ', this.frmID);
 			this.setAppForms_Data({ 
 				id: this.frmID, 
 				path: sF+'Grid.Pagination', 
@@ -184,9 +208,11 @@
 				path:sF+'Grid.LoadDataGrid',
 				data: this.LoadDataGrid});
 
+			if (this.frmType != "popup") {
+				this.LoadDataGrid();
+			}
 
-			this.LoadDataGrid();
-
+			// this.LoadDataGrid();
 	      	// if (this.subForm != "" ) {
 	      	// 	console.log('created - ObjGrid xxxxxxxxxxxxxxx');
 	      	// }
@@ -215,6 +241,7 @@
 				// console.log('Masuk myGrid', this.frmID + ' (' + this.subForm + ') ');
 				// console.log('myGrid : ', this.getAppForms[this.frmID])
 	      		if (this.subForm==="") {
+	      			// console.log('Grid Utama', this.getAppForms[this.frmID]);
 		      		return this.getAppForms[this.frmID];
 	      		} else {
 	      			var f = this.getAppForms[this.frmID];
@@ -226,7 +253,7 @@
 					for (i = 0; i < vPath.length - 1; i++) {
 						f = f[vPath[i]];
 				    }
-
+	      			// console.log('Grid Utama - Bukan ', f);
 		      		return f;
 		      		// return this.getAppForms[this.frmID][vPath];
 	      		}
@@ -249,7 +276,7 @@
 			...mapActions('App',['doAppLoadGrid']),
 			onResize(size){
 				// console.log('onResize', this);
-				// console.log('onResize - size', size);
+				// console.log('"Grid" onResizeWindow - size', size);
 			    // this.tblheight = "height: "+(size.height - 145).toString()+"px"
 				if (this.frmType === "popup") {
 				    this.tblheight = "height: "+(size.height - 300).toString()+"px"
@@ -257,13 +284,43 @@
 					this.tblheight = "";
 				} else {
 				    this.tblheight = "height: "+(size.height - 145).toString()+"px"
+				    // this.tblheight = "height: "+(size.height - 295).toString()+"px"
+				    // this.tblheight = "height: 500px"
 				    // this.tblheight = "height: "+(size.height - 150).toString()+"px; max-height: 600px;"
 				}
-			},			
+			},	
+			onResizeWin(size){
+				// console.log('onResize', this);
+				// console.log('"Grid" onResizeWindow - size', size);
+			    // this.tblheight = "height: "+(size.height - 145).toString()+"px"
+				if (this.frmType === "popup") {
+				    this.tblheight = "height: "+(size.height - 300).toString()+"px"
+				} else if (this.frmType === "grd") {
+					this.tblheight = "";
+				} else {
+				    this.tblheight = "height: "+(size.height - 145).toString()+"px"
+				    // this.tblheight = "height: "+(size.height - 295).toString()+"px"
+				    // this.tblheight = "height: 500px"
+				    // this.tblheight = "height: "+(size.height - 150).toString()+"px; max-height: 600px;"
+				}
+			},	
+			onResizeEle(size){
+				// console.log('"Grid" onResizeElement - size', size);
+			},					
 		    async LoadDataGrid(event) {
 		    	var Saya = this;
 
-				await weAuth.loading.loadData( this , 'Refreshing Your Data, Please Wait...', '', '', 
+		    	var LoadingTitle = "";
+				if (this.frmType === "popup") {
+				    LoadingTitle = "Loading Pop Up Grid";
+				} else if (this.frmType === "grd") {
+				    LoadingTitle = "Loading Data Grid Detail";
+				} else {
+				    // LoadingTitle = "Refreshing Your Data, Please Wait...";
+				    LoadingTitle = "Refreshing Data Grid, Please Wait...";
+				}
+
+				await weAuth.loading.loadData( this , LoadingTitle, '', '', 
 					async () => {
 						var params = new Object;
 
@@ -336,6 +393,18 @@
 	table thead tr:nth-child(1) th{
 	    background: lightgrey;
 	  }
+
+	.sticky-table thead tr:nth-child(1) th {
+    	background: lightgrey;
+	    position: sticky;
+	    top: 0;
+	    z-index: 10;
+	}
+
+	.q-table td, .q-table th {
+	    /* don't shorten cell contents */
+	    white-space: normal !important;
+	}
 
 -->
 <style>

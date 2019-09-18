@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
   <!-- 
   	v-if akan merender ulang (re-create object ulang) 
   	kalau sudah re-create
@@ -8,12 +8,11 @@
   	<div v-show="myForm.Properties.layout==='1'">
 		<ObjGrid :frmID="frmID" />
   	</div>
-  	<div 
-  		 v-if="myObj === undefined ? false : true"
+  	<div v-if="myObj === undefined ? false : true"
   		 v-show="myForm.Properties.layout==='2'" 
   		 class="text-left q-ma-xs round dense row">
 
-  		<div class="col-xs-12 col-md-11 q-ma-xs row">
+  		<div class="col-xs-12 col-md-11 row">
 	  		<div class="col-xs-12 col-md-8">
 				<ObjForm :pObj="myObj.PHBPNOIY" :pFrmObj="'frm'+frmID" />
 				<ObjForm :pObj="myObj.PHADDR" :pFrmObj="'frm'+frmID" />
@@ -30,21 +29,15 @@
 	  		</div>
   		</div>
   		<div class="col-xs-12 col-md-11 q-ma-xs">
-			<ObjForm 
-				:pObj="myObj.PHLINE" :pFrmObj="'frm'+frmID"
-				@eCallDetailForm="PHLINEshow"
-				@eSaveDetailForm="PHLINEsave"
-			>
-				<div 
-					slot="GridForm"
-					:style="$q.platform.is.mobile ? 'width: 280px' : 'width: 500px'"
-				>
-					<ObjForm 
-						v-for="(Obj, index) in myForm.Forms['frmPHLINE']" 
-						:pObj="Obj" :pFrmObj="'frmPHLINE'"
-						:key="index"
-						v-if="Obj.Panel === 'Panel11' ? true : false"
-					/>
+			<ObjForm :pObj="myObj.PHLINE" :pFrmObj="'frm'+frmID"
+					 @eCallDetailForm="PHLINEshow"
+					 @eSaveDetailForm="PHLINEsave">
+				<div slot="GridForm"
+					 :style="$q.platform.is.mobile ? 'width: 280px' : 'width: 500px'" >
+					<ObjForm v-for="(Obj, index) in myForm.Forms['frmPHLINE']" 
+							 :pObj="Obj" :pFrmObj="'frmPHLINE'"
+							 :key="index"
+							 v-if="Obj.Panel === 'Panel11' ? true : false"/>
 				</div>				 	
 			</ObjForm>	
   		</div>
@@ -125,7 +118,7 @@
 					// console.log('index', index);
 					total += Number(g[index].PLTOTL)
 				}
-
+				// console.log('masuk.... Jumlah Grid ');
 				this.myForm.Forms.frmPHHEAD.PHSUBT.Value = total;	
 				this.GrandTotal();							
 			},
@@ -199,15 +192,23 @@
 			},
 			TotalLineAmount () {
 				var f = this.myForm.Forms['frmPHLINE']
-				f.PLTOTL.Value = f.PLQTYS.Value * f.PLHARG.Value;
+				f.PLTOTL.Value = f.PLQTYS.ValueNum * f.PLHARG.ValueNum;
 
 			},
 			GrandTotal() {
 				var f = this.myForm.Forms['frm'+this.frmID]
-
-				var ST = f.PHSUBT.Value;
-				var PM = f.PHEXCT.Value;
-				this.myForm.Forms.frmPHHEAD.PHTOTL.Value = Number(ST) + Number(PM);
+				var ST = f.PHSUBT.ValueNum;
+				var PM = f.PHEXCT.ValueNum;
+					// ST = ST.toString().replace(/,/g, '').toString();
+					// PM = PM.toString().replace(/,/g, '').toString();
+				// console.log('SUBT xxx',  Number(ST))
+				// console.log('EXCT xxx',  Number(PM)) 
+				// console.log('TOTL xxx',  Number(ST) + Number(PM)) 
+				var Total = Number(ST) + Number(PM);
+				this.myForm.Forms.frmPHHEAD.PHTOTL.Value = Total;
+				// console.log('TOTL xxx',  this.myForm.Forms.frmPHHEAD.PHTOTL.Value) 
+				// this.myForm.Forms.frmPHHEAD.PHTOTL.Value = Number(ST) + Number(PM);
+				// this.myForm.Forms.frmPHHEAD.PHTOTL.Value = '123456' + PM;
 
 			},
 			PHLINEshow ({mode, data}) {

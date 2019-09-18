@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
   <!-- 
   	v-if akan merender ulang (re-create object ulang) 
   	kalau sudah re-create

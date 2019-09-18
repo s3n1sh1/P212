@@ -146,6 +146,7 @@
 			...mapMutations('App',['setAppForms_Data']),
 			doApply() {
 
+	      		// console.log('masuk doApply - ', this.myGrid.Grid.Sort)
 				var urut = this.myGrid.Grid.Sort;
 				var o = urut.find(r => r.name === this.dataColumn.field);
 				// var o = urut.find(r => r.name === 'MMITNO');
@@ -187,8 +188,8 @@
 		updated() { 
 			// console.log('ObjGrid_C updated', this.showFrame) 
 
-      		if (!this.showFrame) {
-				// console.log('ObjGrid_C updated', 'masuk if') 
+      		if (!this.showFrame && typeof(this.myGrid.Grid.Sort) != "undefined") {
+
 				// Begin ini semua result sort
 				var sR = this.myGrid.Grid.Sort;
 				this.sortResult = [];

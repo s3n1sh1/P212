@@ -24,16 +24,16 @@
   :error="ErrorObj"
   :error-label="ErrorObj === true ? ErrorLabel : ''"
  -->
-
+<!-- class="myobj" -->
 <q-field v-show="pObj.Show" 
   :label="pObj.Title"
   :icon="pObj.Icon"
   :helper="pObj.Helper"
   :error="$v.ObjForm.$error"
   :error-label="ErrorLabel"
-  :orientation="pObj.Orientation === '' ? 'horizontal' : pObj.Orientation"
-  class="myobj"
->
+  :orientation="pObj.Orientation === '' ? 'horizontal' : pObj.Orientation"  
+  class="q-pr-xs q-pl-xs"
+>   <!--  -->
 	<slot name="ObjH"></slot> <!-- Slot for Object Header -->
 <!--
 ***************************************************  
@@ -157,6 +157,7 @@
   												--> 
 
 	<div v-else-if="pObj.Tipe=='num'">  	
+<!-- 
 		<q-input 
 			type="number" align="right" 
 			v-model="ObjForm" 
@@ -172,8 +173,43 @@
 			:color="WarnaReadOnly"
 			@input="$v.ObjForm.$touch"
 		/>
+ -->
+		<q-input 
+			type="number" align="right" v-show="numObjFlag"
+			v-model="numObj" 
+			:ref="'ref'+pObj.Code+'_num'"
+			:float-label="pObj.Name + ' Numeric' " 
+			:placeholder="pObj.Description === '' ? pObj.Name : pObj.Description"
+			:decimals="pObj.Decimal"
+			:step="pObj.Step"
+			:prefix="pObj.Prefix"
+			:suffix="pObj.Suffix"
+			:readonly="pObj.ReadOnly"
+			:inverted-light="pObj.ReadOnly"
+			:color="WarnaReadOnly"
+			@blur="numBlur"			
+			@focus="numFocus2"			
+		/>		
+		<q-input v-show="!numObjFlag"
+			align="right" 
+			v-model="ObjForm" 
+			:ref="'ref'+pObj.Code"
+			:float-label="pObj.Name + ' Text' " 
+			:placeholder="pObj.Description === '' ? pObj.Name : pObj.Description"
+			:decimals="pObj.Decimal"
+			:step="pObj.Step"
+			:prefix="pObj.Prefix"
+			:suffix="pObj.Suffix"
+			:readonly="pObj.ReadOnly"
+			:inverted-light="pObj.ReadOnly"
+			:color="WarnaReadOnly"
+			@input="$v.ObjForm.$touch"
+			@focus="numFocus"			
+		/>		
+
 	</div>	
 <!--
+			:numeric-keyboard-toggle="false"
 ***************************************************  
 **********END OBJECT NUMERIC
 ***************************************************  
@@ -285,102 +321,102 @@
 		-->
 		<!-- <q-field> -->
 			<div class="row">
-				<q-input 
-					clearable
-					:disable="pObj.Pops[pObj.PopCode+pObj.PopDesc].Disabled"
-					:before="[{icon: 'search', handler () { 
-						if(!pObj.ReadOnly) { pObj.ShowPopUpModal = !pObj.ShowPopUpModal } 
-					}}]"
-					v-model="pObj.Pops[pObj.PopCode+pObj.PopDesc].Value" 
-					:ref="'ref'+pObj.Code+'search'"
-					:float-label="pObj.Name" 
-					:placeholder="pObj.Description === '' ? pObj.Name : pObj.Description"
-					:readonly="pObj.ReadOnly"
-					:inverted-light="pObj.ReadOnly"
-					:color="WarnaReadOnly"
-					@focus="pObj.Pops[pObj.PopCode].Value==='' ? '' : pObj.Pops[pObj.PopCode+pObj.PopDesc].Value=pObj.Pops[pObj.PopCode].Value"
-					@input="$v.ObjForm.$touch"
-					@blur="popBlur"
-					@keyup.enter="$refs['ref'+pObj.Code+'search'].blur()"
-					class="col-12"
-				>
-					<q-autocomplete
-						@search="popAutoComplete"
-						@selected="popSelected"
-						value-field="text"						
-						separator
-						:min-characters="pObj.SearchChar"
-					/> 
+				<q-input clearable
+						:disable="pObj.Pops[pObj.PopCode+pObj.PopDesc].Disabled"
+						:before="[{icon: 'search', handler () { 
+							if(!pObj.ReadOnly) { pObj.ShowPopUpModal = !pObj.ShowPopUpModal } 
+						}}]"
+						v-model="pObj.Pops[pObj.PopCode+pObj.PopDesc].Value" 
+						:ref="'ref'+pObj.Code+'search'"
+						:float-label="pObj.Name" 
+						:placeholder="pObj.Description === '' ? pObj.Name : pObj.Description"
+						:readonly="pObj.ReadOnly"
+						:inverted-light="pObj.ReadOnly"
+						:color="WarnaReadOnly"
+						@focus="pObj.Pops[pObj.PopCode].Value==='' ? '' : 
+								pObj.Pops[pObj.PopCode+pObj.PopDesc].Value=pObj.Pops[pObj.PopCode].Value"
+						@input="$v.ObjForm.$touch"
+						@blur="popBlur"
+						@keyup.enter="$refs['ref'+pObj.Code+'search'].blur()"
+						class="col-12" >
+					<q-autocomplete @search="popAutoComplete"
+									@selected="popSelected"
+									value-field="text"						
+									separator
+									:min-characters="pObj.SearchChar" /> 
 
 				</q-input>
 			</div>
-			<div class="row">
+			<div class="row" v-show="false" >
 				<q-input class="col-xs-2"
-					v-show="false" 
-					v-model="ObjForm" 
-					float-label="IY" 
-					:ref="'ref'+pObj.Code"
-					readonly
-					inverted-light
-					color="grey-6"
-					@input="$v.ObjForm.$touch"
-				/>
+						 v-model="ObjForm" 
+						 float-label="IY" 
+						 :ref="'ref'+pObj.Code"
+						 readonly
+						 inverted-light
+						 color="grey-6"
+						 @input="$v.ObjForm.$touch" />
 				<q-input class="col-xs-4"
-					v-show="false" 
-					v-model="pObj.Pops[pObj.PopCode].Value" 
-					float-label="Code" 
-					readonly
-					inverted-light
-					color="grey-6"
-				/>
+						 v-model="pObj.Pops[pObj.PopCode].Value" 
+						 float-label="Code" 
+						 readonly
+						 inverted-light
+						 color="grey-6" />
 				<q-input class="col-xs-5"
-					v-show="false" 
-					v-model="pObj.Pops[pObj.PopDesc].Value" 
-					float-label="Description" 
-					readonly
-					inverted-light
-					color="grey-6"
-				/>
+						 v-model="pObj.Pops[pObj.PopDesc].Value" 
+						 float-label="Description" 
+						 readonly
+						 inverted-light
+						 color="grey-6" />
 			</div>
+
+
+
+
+			<!-- no-backdrop-dismiss  -->
+			<q-modal v-model="pObj.ShowPopUpModal"
+					 @show="popShow">
+				<q-modal-layout>  <!-- 	v-if="pObj.ShowPopUpModal" 
+										
+										Kalau gak pasang v-if
+										saat form dipanggil, loading Refresh data jalan.
+										Selanjutnya tidak akan loading lagi, sampai click button next or refresh.
+										jadi waktu @show ditambahkan function popShow(), supaya otomatis refresh data.
+
+										Tapi jika pasang v-if
+										form layout nya jadi turun sedikit di object tersebut								
+									-->
+					<div class="row q-ma-md" >
+					<!-- 
+						<q-search	hide-underline
+									color="primary"
+									v-model="popFilter"
+									class="col-6" /> 
+							<span 
+								class="text-primary justify-end" 
+								style="text-transform: uppercase; font-weight: bold; ">
+							</span> 			
+
+					-->
+						<q-input class="col-xs-5 col-md-4"
+								 :before="[{icon: 'search', handler () { LoadDataGrid() }}]"
+								 placeholder="Search"
+								 v-model="pObj.Grid.SearchAllColumns"
+								 @keyup.enter="pObj.Grid.LoadDataGrid()" />
+						<div class="col-xs-7 col-md-8 text-primary text-right">
+								{{pObj.Description}}
+						</div>
+					</div>
+
+					<ObjGrid :frmID="frmID" 
+			            	 :subFrmID="'Forms.'+pFrmObj+'.'+pObj.Code+'.'"
+			            	 frmType="popup" />
+				</q-modal-layout>				
+			</q-modal>
+			
 		<!-- </q-field> -->
 
 
-
-		<q-modal v-model="pObj.ShowPopUpModal" maximized class="q-ma-xl q-pa-xl" >
-			<q-modal-layout v-if="pObj.ShowPopUpModal">
-
-				<div class="row q-ma-md">
-					<!-- <q-search
-					hide-underline
-					color="primary"
-					v-model="popFilter"
-					class="col-6"
-					/> 
-						<span 
-							class="text-primary justify-end" 
-							style="text-transform: uppercase; font-weight: bold; ">
-						</span> 			
-
-				-->
-					<q-input
-						class="col-xs-5 col-md-4"
-						:before="[{icon: 'search', handler () { LoadDataGrid() }}]"
-						placeholder="Search"
-						v-model="pObj.Grid.SearchAllColumns"
-						@keyup.enter="pObj.Grid.LoadDataGrid()"
-					/>
-					<div class="col-xs-7 col-md-8 text-primary text-right">
-							{{pObj.Description}}
-					</div>
-				</div>
-
-				<ObjGrid 
-		            :frmID="frmID"
-		            :subFrmID="'Forms.'+pFrmObj+'.'+pObj.Code+'.'"
-		            frmType="popup"
-            	/>
-			</q-modal-layout>
-		</q-modal>
 
 	</div>
 <!--
@@ -509,6 +545,13 @@
 					path:'Forms.'+this.pFrmObj+'.'+this.pObj.Code+'.'+'grdModalBack',
 					data: this.grdModalBack});			
 
+			} else if(this.pObj.Tipe==="num") {
+				
+				this.setAppForms_Data({
+					id: this.frmID,
+					path:'Forms.'+this.pFrmObj+'.'+this.pObj.Code+'.'+'formatUang',
+					data: this.formatUang});		
+
 			}
 			// console.log('ObjForm created', this.pObj);
 			// console.log(this.pObj.Tipe + ' : ' + this.pObj.Name , this.ObjValidation);
@@ -580,13 +623,36 @@
 								} 
 							}
 							break;
+						case 'num':
+							// console.log('masuk sini computed num get', this.pObj.Value)
+							// console.log('Computed num get ' + this.pObj.Code, this.pObj.Value)
+							
+							// Begin 
+							var n = (this.pObj.Value).toString();
+							this.numObj = Number(n.replace(/,/g, '').toString()) ;  
+							// ini akan keluar informasi  
+							// The specified value "NaN" is not a valid number.
+							// End
+
+							this.pObj.ValueNum = this.pObj.Value;
+							this.pObj.Value = this.formatUang(this.pObj.Value);
+
+							break;
 					}
 					// End Clear	
 
 					return this.pObj.Value;
 				},
 				set: function(newValue) {
-					this.pObj.Value = newValue;
+
+					if (this.pObj.Tipe == "num") {
+						// console.log('Computed num set ' + this.pObj.Code, newValue)
+						// var n = newValue.toString();
+						// this.numObj = n.replace(/,/g, '').toString();
+						this.pObj.ValueNum = this.numObj;
+					}
+					var nilai = newValue;
+					this.pObj.Value = nilai;
 				},
 			},
 			WarnaReadOnly() {
@@ -771,7 +837,7 @@
 					return;
 				}
 
-				console.log('getRecord.....');
+				// console.log('getRecord.....');
 
 				var cari = [{ field: this.pObj.PopCode, 
 							  label: "", 
@@ -829,7 +895,7 @@
 			},
 
 			popSelected(item){		
-				console.log('ObjForm - popSelected','masuk sini')
+				// console.log('ObjForm - popSelected','masuk sini')
 				this.popSetValue({
 					flag: true, 
 					iy: typeof(item.value) === 'number' ? item.value : item.value.trim(), 
@@ -881,6 +947,10 @@
 					done([]);
 				});
 
+			},
+			popShow() {
+				// console.log('masuk sini', this.pObj);
+				this.pObj.Grid.LoadDataGrid();
 			},
 
 /*
@@ -990,13 +1060,80 @@
 					this.grdModalBack();
 				} // End Untuk Update Langsung Keluar
 
-			}
+			},
 /*
 ------------------------------------------------------------------------------------------
 ------------------End object GRID---------------------------------------------------------
 ------------------------------------------------------------------------------------------
 																						*/
 
+
+
+/*
+------------------------------------------------------------------------------------------
+------------------BEGIN object Numeric----------------------------------------------------
+------------------------------------------------------------------------------------------
+																						*/
+			numBlur () {
+				this.numObjFlag = false;
+				// console.log('masuk Blur', this.formatUang(this.numObj));
+				// console.log('masuk Blur', this.pObj);
+				// console.log('masuk Blur', this.ObjForm);
+				this.ObjForm = this.formatUang(this.numObj);
+				this.pObj.ValueNum = this.numObj;
+			},
+			numFocus () {
+				this.numObjFlag = true;
+			   	this.$nextTick(() => {
+			        this.$refs['ref'+this.pObj.Code+'_num'].focus();
+			      });
+
+			},
+			numFocus2 () {
+				var n = (this.ObjForm).toString(); 
+				this.numObj = n.replace(/,/g, '').toString();
+			},
+
+/*
+------------------------------------------------------------------------------------------
+------------------End object Numeric------------------------------------------------------
+------------------------------------------------------------------------------------------
+																						*/
+
+
+
+			formatUang(n){
+				
+				// console.log('formatUang : ', n);
+				// console.log('typeof : ', typeof(n*1));
+				
+				if ( (n*1) === 0) {
+					return n;
+				}
+
+				var angka = n.toString();
+				var number_string = angka.replace(/[^.\d]/g, '').toString(),
+					split   	  = number_string.split('.'),
+					sisa     	  = split[0].length % 3,
+					rupiah     	  = split[0].substr(0, sisa),
+					ribuan     	  = split[0].substr(sisa).match(/\d{3}/gi);
+				// console.log('number_string : ', number_string);
+	 		// 	console.log('split', split);
+	 		// 	console.log('sisa', sisa);
+	 		// 	console.log('rupiah', rupiah);
+	 		// 	console.log('ribuan', ribuan);
+				// tambahkan titik jika yang di input sudah menjadi angka ribuan
+				if(ribuan){
+					// console.log('masuk sini');
+					var separator = sisa ? ',' : '';
+					rupiah += separator + ribuan.join(',');
+				}
+	 
+				rupiah = split[1] != undefined ? rupiah + '.' + split[1] : rupiah;
+				// return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+				// console.log('rupiah', rupiah);
+				return (rupiah ? rupiah : '');
+			},
 
 		},			
 		data () {
@@ -1012,6 +1149,8 @@
 				grdDetailModal: false,
 				grdMode: '',
 				grdSelectionRow: {},
+				numObj : {type: Number, default: 0},
+				numObjFlag: false,
 	      	}
 	    }
 	}

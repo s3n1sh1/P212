@@ -45,7 +45,7 @@
 			:style="(myGrid.Grid.Filter.find(
 						r => r.field === col.name
 					) ? 'font-weight:bold; font-style:italic;' : '')"			
-			@click.native="frmColSetting=!frmColSetting; dataColumn=col" 
+			@click.native="onHeaderClick(col)" 
 			v-for="col in dataHead.cols"
 			v-if="frmType === 'popup' ? col.tipe === 'act' ? false : true : true" 			
 			:key="col.name"
@@ -58,7 +58,6 @@
 				</div>
 				<div v-else>
 				     <!-- color="grey-4" text-color="black"  -->
-
 				    <q-chip :icon="myGrid.Grid.Sort.length === 0 ? '' : 
 				    			   myGrid.Grid.Sort.find(r => r.name === col.name) ? 
 						    			myGrid.Grid.Sort.find(
@@ -72,25 +71,21 @@
 					</q-chip>
 
 				</div>
-
 		</q-th>
 
 
 
-		<q-modal v-model="frmColSetting" 
-			position="top"
-			@show="showFrame=!showFrame"
-			@hide="showFrame=!showFrame"
-			>
-          <GridColSetting 
-	    		:frmID="frmID" 
-	    		:subFrmID="subFrmID"
-	    		:frmType="frmType"
-	    		:myGrid="myGrid"
-	    		:dataColumn="dataColumn"
-	    		:showFrame="showFrame"
-	    		@hide="onHide"
-          />
+		<q-modal 	v-model="frmColSetting" 
+					position="top"
+					@show="showFrame=!showFrame"
+					@hide="showFrame=!showFrame">
+          <GridColSetting 	:frmID="frmID" 
+				    		:subFrmID="subFrmID"
+				    		:frmType="frmType"
+				    		:myGrid="myGrid"
+				    		:dataColumn="dataColumn"
+				    		:showFrame="showFrame"
+	    					@hide="onHide" />
 		</q-modal>
 
 
@@ -119,6 +114,12 @@
 			// },
 			onHide() {
 				this.frmColSetting = false;
+			},
+			onHeaderClick(col) {
+				if (this.frmType != 'grd') { 
+					this.frmColSetting=!this.frmColSetting; 
+					this.dataColumn=col; 
+				}
 			}
 		},
 		created () {			
